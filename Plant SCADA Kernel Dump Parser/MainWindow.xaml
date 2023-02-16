@@ -1,0 +1,203 @@
+﻿<Window x:Class="Plant_SCADA_Kernel_Dump_Parser.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:Plant_SCADA_Kernel_Dump_Parser"
+        mc:Ignorable="d"
+        Title="Plant SCADA Kernel Dump Parser"
+        d:DataContext="{d:DesignInstance local:MainViewModel, IsDesignTimeCreatable=True}"
+        AllowDrop="True"
+        Drop="Window_Drop"
+        Height="768"
+        Width="1024">
+
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="40"></RowDefinition>
+            <RowDefinition></RowDefinition>
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="250"></ColumnDefinition>
+            <ColumnDefinition></ColumnDefinition>
+        </Grid.ColumnDefinitions>
+        <Button Command="{Binding LoadFile}" Margin="4">Load Kernel Dump File</Button>
+        <StackPanel Orientation="Vertical"
+                    Grid.Row="0"
+                    Grid.Column="1" 
+                    Margin="5,1,5,1">
+            <TextBlock Text="{Binding SelectedFile}" ToolTip="{Binding SelectedFile}"/>
+            <TextBlock>
+                <Run Text="{Binding LastEditFile,Mode=OneWay}" />
+            </TextBlock>
+        </StackPanel>
+
+        <TabControl Grid.Row="1"
+                    Grid.Column="0"
+                    DataContext="{Binding Dump}">
+            <TabItem Header="Tables">
+                <DockPanel>
+                    <Grid DockPanel.Dock="Top">
+                        <TextBox Text="{Binding FilterTables,UpdateSourceTrigger=PropertyChanged}"
+                                 Height="30"
+                                 x:Name="SearchTermTextBox"
+                                 VerticalContentAlignment="Center"
+                                 Margin="5" />
+                        <TextBlock IsHitTestVisible="False"
+                                   Text="Filter"
+                                   VerticalAlignment="Center"
+                                   HorizontalAlignment="Left"
+                                   Margin="10,0,0,0"
+                                   Foreground="DarkGray">
+                            <TextBlock.Style>
+                                <Style TargetType="{x:Type TextBlock}">
+                                    <Setter Property="Visibility"
+                                            Value="Collapsed" />
+                                    <Style.Triggers>
+                                        <DataTrigger Binding="{Binding Text, ElementName=SearchTermTextBox}"
+                                                     Value="">
+                                            <Setter Property="Visibility"
+                                                    Value="Visible" />
+                                        </DataTrigger>
+                                    </Style.Triggers>
+                                </Style>
+                            </TextBlock.Style>
+                        </TextBlock>
+                    </Grid>
+                    <ListBox HorizontalAlignment="Stretch"
+                             VerticalAlignment="Stretch"
+                             ItemsSource="{Binding Tables }"
+                             SelectionChanged="ListBox_SelectionChanged"
+                             DockPanel.Dock="Bottom">
+                    </ListBox>
+                </DockPanel>
+            </TabItem>
+            <TabItem Header="I/O Devices">
+                <DockPanel>
+                    <Grid DockPanel.Dock="Top">
+                        <TextBox Text="{Binding FilterIODevices,UpdateSourceTrigger=PropertyChanged}"
+                                 Height="30"
+                                 x:Name="SearchTermTextBox1"
+                                 VerticalContentAlignment="Center"
+                                 Margin="5" />
+                        <TextBlock IsHitTestVisible="False"
+                                   Text="Filter"
+                                   VerticalAlignment="Center"
+                                   HorizontalAlignment="Left"
+                                   Margin="10,0,0,0"
+                                   Foreground="DarkGray">
+                            <TextBlock.Style>
+                                <Style TargetType="{x:Type TextBlock}">
+                                    <Setter Property="Visibility"
+                                            Value="Collapsed" />
+                                    <Style.Triggers>
+                                        <DataTrigger Binding="{Binding Text, ElementName=SearchTermTextBox1}"
+                                                     Value="">
+                                            <Setter Property="Visibility"
+                                                    Value="Visible" />
+                                        </DataTrigger>
+                                    </Style.Triggers>
+                                </Style>
+                            </TextBlock.Style>
+                        </TextBlock>
+                    </Grid>
+                    <ListBox HorizontalAlignment="Stretch"
+                             VerticalAlignment="Stretch"
+                             ItemsSource="{Binding Iodevices}"
+                             SelectionChanged="ListBox_SelectionChanged"
+                             DockPanel.Dock="Bottom"></ListBox>
+                </DockPanel>
+
+            </TabItem>
+            <TabItem Header="Queues">
+                <DockPanel >
+                    <Grid DockPanel.Dock="Top">
+                        <TextBox Text="{Binding FilterQueues,UpdateSourceTrigger=PropertyChanged}"
+                                 Height="30"
+                                 x:Name="SearchTermTextBox2"
+                                 VerticalContentAlignment="Center"
+                                 Margin="5" />
+                        <TextBlock IsHitTestVisible="False"
+                                   Text="Filter"
+                                   VerticalAlignment="Center"
+                                   HorizontalAlignment="Left"
+                                   Margin="10,0,0,0"
+                                   Foreground="DarkGray">
+                            <TextBlock.Style>
+                                <Style TargetType="{x:Type TextBlock}">
+                                    <Setter Property="Visibility"
+                                            Value="Collapsed" />
+                                    <Style.Triggers>
+                                        <DataTrigger Binding="{Binding Text, ElementName=SearchTermTextBox2}"
+                                                     Value="">
+                                            <Setter Property="Visibility"
+                                                    Value="Visible" />
+                                        </DataTrigger>
+                                    </Style.Triggers>
+                                </Style>
+                            </TextBlock.Style>
+                        </TextBlock>
+                    </Grid>
+                    <ListBox HorizontalAlignment="Stretch"
+                             DockPanel.Dock="Bottom"
+                             VerticalAlignment="Stretch"
+                             ItemsSource="{Binding Queues}"
+                             SelectionChanged="ListBox_SelectionChanged"></ListBox>
+                </DockPanel>
+            </TabItem>
+            <TabItem Header="Parameters">
+                <DockPanel>
+                    <Grid DockPanel.Dock="Top">
+                        <TextBox Text="{Binding FilterIniParams,UpdateSourceTrigger=PropertyChanged}"
+                                 Height="30"
+                                 x:Name="SearchTermTextBox3"
+                                 VerticalContentAlignment="Center"
+                                 Margin="5" />
+                        <TextBlock IsHitTestVisible="False"
+                                   Text="Filter"
+                                   VerticalAlignment="Center"
+                                   HorizontalAlignment="Left"
+                                   Margin="10,0,0,0"
+                                   Foreground="DarkGray">
+                            <TextBlock.Style>
+                                <Style TargetType="{x:Type TextBlock}">
+                                    <Setter Property="Visibility"
+                                            Value="Collapsed" />
+                                    <Style.Triggers>
+                                        <DataTrigger Binding="{Binding Text, ElementName=SearchTermTextBox3}"
+                                                     Value="">
+                                            <Setter Property="Visibility"
+                                                    Value="Visible" />
+                                        </DataTrigger>
+                                    </Style.Triggers>
+                                </Style>
+                            </TextBlock.Style>
+                        </TextBlock>
+                    </Grid>
+                    <ListBox HorizontalAlignment="Stretch"
+                             DockPanel.Dock="Bottom"
+                             VerticalAlignment="Stretch"
+                             ItemsSource="{Binding IniParams}"
+                             SelectionChanged="ListBox_SelectionChanged"></ListBox>
+                </DockPanel>
+            </TabItem>
+        </TabControl>
+        <GridSplitter Grid.Row="1"
+                      Grid.Column="0" VerticalAlignment="Stretch" Width="4"/>
+        <ScrollViewer Grid.Row="1"
+                      Grid.Column="1"
+                      VerticalScrollBarVisibility="Visible"
+                      HorizontalScrollBarVisibility="Visible">
+            <TextBox Text="{Binding CurrentlySelectedItem}"
+                       FontFamily="Courier New"
+                       ScrollViewer.CanContentScroll="True"
+                       FontSize="13"
+                       Margin="2"
+                       IsReadOnly="True"
+                     AllowDrop="True"
+                     PreviewDragOver="TextBox_PreviewDragOver"
+                       >
+            </TextBox>
+        </ScrollViewer>
+    </Grid>
+</Window>
