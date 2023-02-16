@@ -7,6 +7,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Text.RegularExpressions;
 using System.Diagnostics;
+using System.Windows;
 
 namespace Plant_SCADA_Kernel_Dump_Parser
 {
@@ -43,6 +44,8 @@ namespace Plant_SCADA_Kernel_Dump_Parser
         KernelItem _taskControlBlocks;
 
         ObservableCollection<KernelItem> _filteredTables, _filteredIODevices, _filteredQueues, _filteredIniParams;
+
+
 
         public ObservableCollection<KernelItem> Tables
         {
@@ -209,6 +212,34 @@ namespace Plant_SCADA_Kernel_Dump_Parser
             _filteredIniParams = new ObservableCollection<KernelItem>();
         }
 
+        public static bool IsValidKernelDump(FileInfo dumpFile)
+        {
+
+            KernelDump kd = new KernelDump();
+            bool retValue = false;
+            try
+            {
+                FileStream kernelFileStream = new FileStream(dumpFile.FullName, FileMode.Open, FileAccess.Read, FileShare.ReadWrite);
+                StreamReader kernelFileReader = new StreamReader(kernelFileStream);
+                
+                for (int i = 0; i < 100; i++)
+                {
+                    string line = kernelFileReader.ReadLine();
+                    if (kd.IsKernelStart(line))
+                    {
+                        retValue = true;
+                        break;
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                return false;
+            }
+
+            return retValue;
+        }
+
         public static KernelDump Parse(FileInfo dumpFile, KernelDump kDump = null)
         {
             if (kDump == null)
@@ -239,18 +270,14 @@ namespace Plant_SCADA_Kernel_Dump_Parser
 
 
                 }
-
-                // Clean up
                 kernelFileReader.Close();
                 kernelFileStream.Close();
-
-
             }
 
             catch (Exception ex)
             {
                 Debug.Print($"Exception in parsing kernel dump:{ex.Message} - {ex.StackTrace}");
-
+                MessageBox.Show($"An error occurred while parsing the kernel dump file: {ex.Message}","Error",MessageBoxButton.OK,MessageBoxImage.Error);
             }
             return kDump;
 

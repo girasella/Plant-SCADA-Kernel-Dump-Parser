@@ -68,7 +68,7 @@ namespace Plant_SCADA_Kernel_Dump_Parser
                 if (e.Data.GetDataPresent(DataFormats.FileDrop))
                 {
                     string[] files = (string[])e.Data.GetData(DataFormats.FileDrop);
-                    ViewModel.LoadKernel(files[0]);
+                    ViewModel.KernelLoad(files[0],true);
                 }
             }
             catch (Exception ex)

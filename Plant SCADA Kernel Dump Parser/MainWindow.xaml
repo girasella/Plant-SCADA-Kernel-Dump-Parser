@@ -14,14 +14,23 @@
 
     <Grid>
         <Grid.RowDefinitions>
-            <RowDefinition Height="40"></RowDefinition>
+            <RowDefinition Height="55"></RowDefinition>
             <RowDefinition></RowDefinition>
         </Grid.RowDefinitions>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="250"></ColumnDefinition>
             <ColumnDefinition></ColumnDefinition>
         </Grid.ColumnDefinitions>
-        <Button Command="{Binding LoadFile}" Margin="4">Load Kernel Dump File</Button>
+        <StackPanel Grid.Row="0"
+                    Grid.Column="0">
+            <Button Command="{Binding LoadFile}"
+                    Margin="4">Load Kernel Dump File</Button>
+            <CheckBox IsChecked="{Binding AutoReload}"
+                      Content="Automatic reloading" 
+                      HorizontalAlignment="Center" Margin="3"/>
+
+        </StackPanel>
+
         <StackPanel Orientation="Vertical"
                     Grid.Row="0"
                     Grid.Column="1" 
@@ -189,14 +198,13 @@
                       VerticalScrollBarVisibility="Visible"
                       HorizontalScrollBarVisibility="Visible">
             <TextBox Text="{Binding CurrentlySelectedItem}"
-                       FontFamily="Courier New"
-                       ScrollViewer.CanContentScroll="True"
-                       FontSize="13"
-                       Margin="2"
-                       IsReadOnly="True"
+                     FontFamily="Courier New"
+                     ScrollViewer.CanContentScroll="True"
+                     FontSize="13"
+                     Margin="2"
+                     IsReadOnly="True"
                      AllowDrop="True"
-                     PreviewDragOver="TextBox_PreviewDragOver"
-                       >
+                     PreviewDragOver="TextBox_PreviewDragOver">
             </TextBox>
         </ScrollViewer>
     </Grid>
